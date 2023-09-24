@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './todo.css';
+import axios from 'axios';
 
 function TodoList() {
 
@@ -7,17 +8,35 @@ function TodoList() {
   const [mainArr, setMainArr] = useState([]);
   const [inpVal, setInpVal] = useState("");
   const [bool, setBool] = useState(false);
+  const url = "http://localhost:8000/";
+
+  useEffect(() => {
+    axios.get(url)
+      .then(res => {
+        console.log(res.data);
+        const updatedArr = res.data;
+        setMainArr([...updatedArr]);
+      })
+      .catch(err => console.log(err));
+  }, [])
 
   const getValue = (event) => {
     setData(event.target.value);
   }
   const onSubmitHandler = (event) => {
     event.preventDefault();
-    setMainArr([...mainArr, data]);
-    setData("");
+    axios.post(url, { data })
+      .then(res => {
+        setMainArr([...mainArr, res.data]);
+        setData("");
+      })
+      .catch(err => console.log(err));
   }
-  const editInp = (element, index) => {
-    let tempArr = [...mainArr]
+  const editInp = (element, index, todoId) => {
+    axios.delete(`${url}${todoId}`)
+      .then(res => { console.log(res.data) })
+      .catch(err => console.log(err));
+    let tempArr = [...mainArr];
     tempArr.splice(index, 1);
     setMainArr(tempArr);
     setData(element);
@@ -27,12 +46,18 @@ function TodoList() {
   const editInpVal = (event) => {
     setInpVal(event.target.value);
   }
-  const deleteInp = (index) => {
+  const deleteInp = (index, todoId) => {
+    axios.delete(`${url}${todoId}`)
+      .then(res => { console.log(res.data) })
+      .catch(err => console.log(err));
     let tempArr = [...mainArr]
     tempArr.splice(index, 1);
     setMainArr(tempArr);
   }
   const deleteAllInp = () => {
+    axios.put(url)
+    .then(res => console.log(res.data))
+    .catch(err => console.log(err));
     let modal = document.getElementById("myModal");
     modal.style.display = "none";
     setMainArr([]);
@@ -70,12 +95,12 @@ function TodoList() {
 
                     <div className="content">
                       <input type="text" className="text" disabled id={"myInp"}
-                         onChange={editInpVal} 
-                        value={bool ? inpVal : element} />
+                        onChange={editInpVal}
+                        value={bool ? inpVal : element.todoText} />
                     </div>
                     <div className="actions">
-                      <button onClick={() => editInp(element, index)} id='edit' className="edit">Edit</button>
-                      <button onClick={() => { deleteInp(index) }} className="delete">Delete</button>
+                      <button onClick={() => editInp(element.todoText, index, element._id)} id='edit' className="edit">Edit</button>
+                      <button onClick={() => { deleteInp(index, element._id) }} className="delete">Delete</button>
                     </div>
                   </div>
                 </div>
