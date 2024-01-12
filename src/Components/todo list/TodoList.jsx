@@ -25,12 +25,16 @@ function TodoList() {
   }
   const onSubmitHandler = (event) => {
     event.preventDefault();
-    axios.post(url, { data })
-      .then(res => {
-        setMainArr([...mainArr, res.data]);
-        setData("");
-      })
-      .catch(err => console.log(err));
+    if (!data) {
+      alert("Please fill the input");
+    } else {
+      axios.post(url, { data })
+        .then(res => {
+          setMainArr([...mainArr, res.data]);
+          setData("");
+        })
+        .catch(err => console.log(err));
+    }
   }
   const editInp = (element, index, todoId) => {
     axios.delete(`${url}${todoId}`)
@@ -56,8 +60,8 @@ function TodoList() {
   }
   const deleteAllInp = () => {
     axios.put(url)
-    .then(res => console.log(res.data))
-    .catch(err => console.log(err));
+      .then(res => console.log(res.data))
+      .catch(err => console.log(err));
     let modal = document.getElementById("myModal");
     modal.style.display = "none";
     setMainArr([]);
@@ -110,9 +114,12 @@ function TodoList() {
         </section>
       </main>
 
-      <div className='main'>
-        <button onClick={btnClk} className="Delete" id="myBtn"> "Delete All !" </button>
-      </div>
+      {
+        mainArr == "" ?
+          <div></div> : <div className='main'>
+            <button onClick={btnClk} className="Delete" id="myBtn"> "Delete All !" </button>
+          </div>
+      }
       <div id="myModal" className="modal">
 
         <div className="modal-content">
