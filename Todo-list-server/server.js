@@ -5,7 +5,13 @@ const mongoose = require('mongoose');
 const app = express();
 const routes = require("./routes/route");
 
-app.use(cors());
+app.use(cors({
+    origin: 'app.use(cors({
+  origin: 'http://yourfrontend.com',
+  methods: ['GET', 'POST', 'PUT', 'DELETE']
+}));',
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
+  }));
 app.use(express.json());
 app.use(routes);
 
