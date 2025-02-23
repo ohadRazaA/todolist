@@ -13,7 +13,6 @@ function TodoList() {
   useEffect(() => {
     axios.get(url)
       .then(res => {
-        console.log(res.data);
         const updatedArr = res.data;
         setMainArr([...updatedArr]);
       })
