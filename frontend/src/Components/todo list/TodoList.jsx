@@ -115,7 +115,7 @@ function TodoList() {
       </main>
 
       {
-        mainArr == "" ?
+        mainArr === "" ?
           <div></div> : <div className='main'>
             <button onClick={btnClk} className="Delete" id="myBtn"> "Delete All !" </button>
           </div>
