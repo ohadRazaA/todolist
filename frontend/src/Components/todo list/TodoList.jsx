@@ -8,7 +8,7 @@ function TodoList() {
   const [mainArr, setMainArr] = useState([]);
   const [inpVal, setInpVal] = useState("");
   const [bool, setBool] = useState(false);
-  const url = "/api/";
+  const url = "http://localhost:8000/";
 
   useEffect(() => {
     axios.get(url)
